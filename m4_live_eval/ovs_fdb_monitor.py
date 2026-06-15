@@ -13,21 +13,15 @@ SWITCHES = [
 
 class FDBMonitor:
 
-    def __init__(self):
+    def __init__(self, blacklist=None):
 
-        # last_seen[sw][mac] = port
-        # Tracks the last known port for each MAC on each switch
-        # independently. A flap is only when port changes on the
-        # SAME switch — not when a MAC moves between switches
-        # (which is normal dragonfly multipath behaviour).
+        self.blacklist = blacklist if blacklist else set()
+
         self.last_seen = {sw: {} for sw in SWITCHES}
 
         self.flap_counts = {}
 
     def read_fdb(self):
-        """
-        Returns dict: sw -> {mac -> (port, age)}
-        """
 
         result = {sw: {} for sw in SWITCHES}
 
@@ -56,8 +50,12 @@ class FDBMonitor:
                     if match:
 
                         port = int(match.group(1))
-                        mac  = match.group(2)
-                        age  = int(match.group(3))
+                        mac = match.group(2)
+                        age = int(match.group(3))
+
+                        # Hide quarantined MACs
+                        if mac in self.blacklist:
+                            continue
 
                         result[sw][mac] = (port, age)
 
@@ -65,6 +63,7 @@ class FDBMonitor:
 
                 print(f"\n===== {sw} =====")
                 print(f"Error: {e}")
+
                 if output is not None:
                     print(output)
 
@@ -84,11 +83,11 @@ class FDBMonitor:
                 prev_port = self.last_seen[sw].get(mac)
 
                 if prev_port is None:
-                    # First time seeing this MAC on this switch
+
                     self.last_seen[sw][mac] = port
 
                 elif prev_port != port:
-                    # Same switch, different port = real MAC flap
+
                     self.flap_counts[mac] += 1
 
                     print(

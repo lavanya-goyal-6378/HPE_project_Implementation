@@ -1,5 +1,6 @@
 from mininet.net import Mininet
 from mininet.node import OVSSwitch
+import time
 import subprocess
 
 
@@ -93,5 +94,18 @@ def build_dragonfly():
     net.addLink(g0_s1, g1_s1)
     net.addLink(g1_s1, g2_s1)
     net.addLink(g2_s1, g0_s1)
-
     return net
+
+if __name__ == "__main__":
+    net = build_dragonfly()
+    net.start()
+    install_normal_flows(net)
+    print("Waiting for STP convergence...")
+    time.sleep(15)
+    net.pingAll()
+
+    from mininet.cli import CLI
+    CLI(net)
+
+    net.stop()
+        
