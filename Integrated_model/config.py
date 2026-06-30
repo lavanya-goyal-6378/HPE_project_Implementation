@@ -30,8 +30,6 @@ ENGINE_INTERVAL = 5
 
 UNICAST_TABLE_CAPACITY = 512
 
-MULTICAST_TABLE_CAPACITY = 128
-
 
 
 # =========================================================
@@ -45,9 +43,6 @@ MULTICAST_TABLE_CAPACITY = 128
 TTL_BASE = 30
 
 TTL_MAX = 60
-
-
-MULTICAST_TREE_TTL = 60
 
 
 ALPHA = 0.5

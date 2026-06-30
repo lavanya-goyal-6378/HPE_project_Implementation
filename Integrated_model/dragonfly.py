@@ -1,7 +1,5 @@
 """
-=========================================================
-Simple Dragonfly Topology
-=========================================================
+Dragonfly Topology
 """
 
 from mininet.net import Mininet
@@ -15,9 +13,9 @@ import subprocess
 from engine import start_engine
 
 
-# =========================================================
+#
 # Create Topology
-# =========================================================
+#
 
 def create_network():
 
@@ -90,9 +88,9 @@ def create_network():
 
 
 
-# =========================================================
+#
 # Configure OVS
-# =========================================================
+#
 
 def configure_switches(net):
 
@@ -116,9 +114,9 @@ def configure_switches(net):
 
 
 
-# =========================================================
+#
 # Main
-# =========================================================
+#
 
 def run_network():
 
@@ -152,9 +150,7 @@ def run_network():
 
     print("\n[+] Forwarding Engine Started\n")
 
-    # Hand control to Mininet CLI.
-    # Engine keeps running in the background.
-    # Type 'exit' or Ctrl-D to stop.
+
     CLI(net)
 
     net.stop()

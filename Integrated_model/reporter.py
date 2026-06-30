@@ -23,6 +23,8 @@ from utils import (
     log_event,
 )
 
+from logger import write_cycle_log
+
 
 # =========================================================
 # Console Statistics
@@ -170,7 +172,7 @@ def export_results():
 # Reporting Phase
 # =========================================================
 
-def reporting_phase():
+def reporting_phase(unicast_forwarded=0, flooded=0):
     """
     Execute all reporting tasks.
     """
@@ -184,3 +186,6 @@ def reporting_phase():
     print_engine_statistics()
 
     log_cycle()
+
+    # Write demo log file and CSV row for this cycle
+    write_cycle_log(unicast_forwarded, flooded)

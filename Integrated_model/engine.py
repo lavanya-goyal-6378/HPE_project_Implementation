@@ -27,6 +27,8 @@ from models import (
 
 from reporter import reporting_phase
 
+from logger import setup_logger
+
 
 running = True
 
@@ -309,7 +311,7 @@ def engine_cycle():
 
     analyze_forwarding()
 
-    reporting_phase()
+    reporting_phase(unicast_forwarded=unicast_count, flooded=flood_count)
 
     print("\n--- Flood Reduction Statistics ---")
 
@@ -329,6 +331,8 @@ def start_engine():
     signal.signal(signal.SIGTERM, stop_engine)
 
     print("Starting Simple Forwarding Engine...")
+
+    setup_logger()
 
     snapshot_baseline()
 
